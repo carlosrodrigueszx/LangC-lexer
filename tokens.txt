@@ -4,9 +4,9 @@ BOOL bool
 SHOW show
 TRUE true
 FALSE false
-VAR identificador
 INTEGER numero_inteiro
 CONST string_literal
+VAR identificador
 EQ atribuicao,comparacao_simples
 EQEQ comparacao_igualdade
 GT maior_que
@@ -18,3 +18,4 @@ DIV divisao
 LPAREN parentese_esquerdo
 RPAREN parentese_direito
 SEMICOLON ponto_e_virgula
+WHITESPACE espaco,tabulacao,nova_linha

@@ -1,0 +1,21 @@
+teste 1 - basico:
+// Não reconhece ponto ainda
+
+teste 2 - operadores aritmeticos:
+// Não reconhece percent (%)
+
+teste 3 - operadores relacionais:
+// Não reconhece percent (%)
+
+teste 4 - operadores logicos:
+// Não reconhece E comercial (&)
+
+teste 5 - condicionais if e else:
+// Não reconhece chaves {}
+
+
+
+
+Perguntas:
+ - O projeto PEDE que algum desses seja tratado?
+ - 

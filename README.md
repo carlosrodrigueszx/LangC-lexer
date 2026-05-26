@@ -37,7 +37,7 @@ O analisador léxico deve:
 
 ---
 
-# Estrutura do Projeto
+# Estrutura do Projeto ( Tree do Arquivo raiz )
 
 ```text
 langc_lexer/
