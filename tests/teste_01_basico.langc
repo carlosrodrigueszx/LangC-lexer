@@ -1,9 +1,0 @@
-int x;
-float y;
-char c;
-
-x = 10;
-
-
-y = 20.5;
-c = 'a';

@@ -157,13 +157,16 @@ def tokenizar(source, dfa=None):
             continue
 
         # Desambiguação VAR vs INTEGER pelo primeiro caractere do lexema.
-        # O NFA de VAR usa star(alnum) que inclui dígitos, então identificadores
-        # terminados em dígito (ex: "valor1") podem ser marcados erroneamente
-        # como INTEGER pelo DFA. A regra é simples:
-        #   - Lexema começa com letra ou _ → sempre VAR
-        #   - Lexema começa com dígito    → sempre INTEGER
+        # O NFA de VAR usa star(alnum) que inclui dígitos, causando conflitos.
+        # Regras:
+        #   - Começa com letra ou _ → VAR
+        #   - Começa com dígito, só dígitos → INTEGER
+        #   - Começa com dígito, mas tem letras (ex: "1valor") → ERRO léxico
         if tok.tipo in ("VAR", "INTEGER"):
             if tok.lexema[0].isdigit():
+                if not tok.lexema.isdigit():
+                    print(f"ERRO: token inválido '{tok.lexema}' na linha {tok.linha}")
+                    return None
                 tok.tipo = "INTEGER"
             else:
                 tok.tipo = "VAR"
