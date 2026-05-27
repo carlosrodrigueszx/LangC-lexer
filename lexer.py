@@ -156,18 +156,20 @@ def tokenizar(source, dfa=None):
         if tok.tipo == "WHITESPACE":
             continue
 
-        # Desambiguação VAR vs INTEGER pelo primeiro caractere do lexema.
+        # Desambiguação VAR vs NUM pelo lexema.
         # O NFA de VAR usa star(alnum) que inclui dígitos, causando conflitos.
-        # Regras:
-        #   - Começa com letra ou _ → VAR
-        #   - Começa com dígito, só dígitos → INTEGER
-        #   - Começa com dígito, mas tem letras (ex: "1valor") → ERRO léxico
-        if tok.tipo in ("VAR", "INTEGER"):
+        # A palavra reservada "num" também produz token NUM — distinguimos pelo lexema:
+        #   - Lexema é só dígitos                   → NUM (valor numérico)
+        #   - Lexema começa com letra ou _           → VAR (identificador)
+        #   - Lexema começa com dígito + tem letras  → ERRO léxico
+        if tok.tipo in ("VAR", "NUM") and tok.lexema not in (
+            "num", "text", "bool", "show", "true", "false"
+        ):
             if tok.lexema[0].isdigit():
                 if not tok.lexema.isdigit():
                     print(f"ERRO: token inválido '{tok.lexema}' na linha {tok.linha}")
                     return None
-                tok.tipo = "INTEGER"
+                tok.tipo = "NUM"
             else:
                 tok.tipo = "VAR"
 
@@ -267,8 +269,8 @@ def run_tests():
         (
             "Exemplo do enunciado (3 linhas)",
             'num a = 0 ;\nnum b = 5 + a ;\ntext c = "teSte" ;',
-            "NUM VAR EQ INTEGER SEMICOLON\n"
-            "NUM VAR EQ INTEGER ADD VAR SEMICOLON\n"
+            "NUM VAR EQ NUM SEMICOLON\n"
+            "NUM VAR EQ NUM ADD VAR SEMICOLON\n"
             "TEXT VAR EQ CONST SEMICOLON"
         ),
 
@@ -278,7 +280,7 @@ def run_tests():
         (
             "Declaração num simples",
             "num x = 10 ;",
-            "NUM VAR EQ INTEGER SEMICOLON"
+            "NUM VAR EQ NUM SEMICOLON"
         ),
         (
             "Declaração text",
@@ -302,7 +304,7 @@ def run_tests():
         (
             "Prioridade: 'num' é NUM, não VAR",
             "num num = 5 ;",
-            "NUM NUM EQ INTEGER SEMICOLON"
+            "NUM NUM EQ NUM SEMICOLON"
         ),
         (
             "Prioridade: 'show' é SHOW, não VAR",
@@ -316,7 +318,7 @@ def run_tests():
         (
             "Operadores aritméticos",
             "num r = 2 + 3 * 4 / 1 - 0 ;",
-            "NUM VAR EQ INTEGER ADD INTEGER MUL INTEGER DIV INTEGER SUB INTEGER SEMICOLON"
+            "NUM VAR EQ NUM ADD NUM MUL NUM DIV NUM SUB NUM SEMICOLON"
         ),
 
         # ------------------------------------------------------------------
@@ -330,7 +332,7 @@ def run_tests():
         (
             "Atribuição com = simples",
             "num a = 5 ;",
-            "NUM VAR EQ INTEGER SEMICOLON"
+            "NUM VAR EQ NUM SEMICOLON"
         ),
         (
             "Operadores > e <",
@@ -340,7 +342,7 @@ def run_tests():
         (
             "Operador <",
             "show x < 10 ;",
-            "SHOW VAR LT INTEGER SEMICOLON"
+            "SHOW VAR LT NUM SEMICOLON"
         ),
 
         # ------------------------------------------------------------------
@@ -349,7 +351,7 @@ def run_tests():
         (
             "Expressão com parênteses",
             "num r = ( 2 + 3 ) ;",
-            "NUM VAR EQ LPAREN INTEGER ADD INTEGER RPAREN SEMICOLON"
+            "NUM VAR EQ LPAREN NUM ADD NUM RPAREN SEMICOLON"
         ),
 
         # ------------------------------------------------------------------
@@ -372,12 +374,12 @@ def run_tests():
         (
             "Identificador com underscore",
             "num _x = 1 ;",
-            "NUM VAR EQ INTEGER SEMICOLON"
+            "NUM VAR EQ NUM SEMICOLON"
         ),
         (
             "Identificador com dígito",
             "num valor1 = 99 ;",
-            "NUM VAR EQ INTEGER SEMICOLON"
+            "NUM VAR EQ NUM SEMICOLON"
         ),
 
         # ------------------------------------------------------------------
@@ -395,16 +397,16 @@ def run_tests():
             "show soma ;\n"
             "show a < b ;\n"
             "show a = 5 ;",
-            "SHOW INTEGER GT INTEGER SEMICOLON\n"
-            "NUM VAR EQ INTEGER SEMICOLON\n"
-            "NUM VAR EQ INTEGER SEMICOLON\n"
+            "SHOW NUM GT NUM SEMICOLON\n"
+            "NUM VAR EQ NUM SEMICOLON\n"
+            "NUM VAR EQ NUM SEMICOLON\n"
             "NUM VAR EQ VAR ADD VAR SEMICOLON\n"
             "TEXT VAR EQ CONST SEMICOLON\n"
             "SHOW VAR SEMICOLON\n"
             "SHOW VAR SEMICOLON\n"
             "SHOW VAR SEMICOLON\n"
             "SHOW VAR LT VAR SEMICOLON\n"
-            "SHOW VAR EQ INTEGER SEMICOLON"
+            "SHOW VAR EQ NUM SEMICOLON"
         ),
 
         # ------------------------------------------------------------------

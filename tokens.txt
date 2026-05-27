@@ -1,10 +1,9 @@
-NUM num
+NUM num,numero_inteiro
 TEXT text
 BOOL bool
 SHOW show
 TRUE true
 FALSE false
-INTEGER numero_inteiro
 CONST string_literal
 VAR identificador
 EQ atribuicao,comparacao_simples

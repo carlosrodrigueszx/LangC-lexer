@@ -317,7 +317,7 @@ def verify_dfa(dfa):
 
     valid_tokens = {
         "NUM", "TEXT", "BOOL", "SHOW", "TRUE", "FALSE",
-        "VAR", "INTEGER", "CONST",
+        "VAR", "NUM", "CONST",
         "EQ", "EQEQ", "GT", "LT",
         "ADD", "SUB", "MUL", "DIV",
         "LPAREN", "RPAREN", "SEMICOLON", "WHITESPACE"
@@ -403,7 +403,7 @@ def _test_all_tokens_present():
 
     esperados = {
         "NUM", "TEXT", "BOOL", "SHOW", "TRUE", "FALSE",
-        "VAR", "INTEGER", "CONST",
+        "VAR", "NUM", "CONST",
         "EQ", "EQEQ", "GT", "LT",
         "ADD", "SUB", "MUL", "DIV",
         "LPAREN", "RPAREN", "SEMICOLON", "WHITESPACE"

@@ -325,7 +325,7 @@ def build_all_token_nfas():
     # ------------------------------------------------------------------
     # 3. Números inteiros: [0-9]+
     # ------------------------------------------------------------------
-    integer_nfa = build_token_nfa("INTEGER", nfa_plus(digit))
+    integer_nfa = build_token_nfa("NUM", nfa_plus(digit))
 
     # ------------------------------------------------------------------
     # 4. String literal: "[^"]*"
@@ -379,7 +379,7 @@ def build_all_token_nfas():
         ("SHOW",      kw_show),
         ("TRUE",      kw_true),
         ("FALSE",     kw_false),
-        ("INTEGER",   integer_nfa),
+        ("NUM",   integer_nfa),
         ("CONST",     string_nfa),
         ("VAR",       var_nfa),
         ("EQEQ",      eqeq_nfa),
@@ -582,7 +582,7 @@ def _test_combined_nfa():
     tokens_presentes = set(nfa["accept"].values())
     tokens_esperados = {
         "NUM", "TEXT", "BOOL", "SHOW", "TRUE", "FALSE",
-        "VAR", "INTEGER", "CONST",
+        "VAR", "NUM", "CONST",
         "EQ", "EQEQ", "GT", "LT",
         "ADD", "SUB", "MUL", "DIV",
         "LPAREN", "RPAREN", "SEMICOLON", "WHITESPACE"
